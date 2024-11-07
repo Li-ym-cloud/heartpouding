@@ -2,9 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Random Context</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f7f7f7; /* 轻微的背景颜色 */
+        }
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: linear-gradient(135deg, rgba(200, 200, 200, 0.05), rgba(200, 200, 200, 0));
+            border-radius: 10px;
+            padding: 20px;
+            width: 50vw;
+            height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+            font-size: 20px;
+            /* 添加动画 */
+            animation: changeBackground 10s infinite alternate;
+        }
+        /* 定义动画 */
+        @keyframes changeBackground {
+            0% {
+                background: linear-gradient(135deg, rgba(200, 200, 200, 0.05), rgba(200, 200, 200, 0));
+            }
+            100% {
+                background: linear-gradient(135deg, rgba(200, 200, 200, 0.2), rgba(200, 200, 200, 0));
+            }
+        }
+    </style>
 </head>
 <body>
-    <p>{{record}}</p>
+    <div id="contentDiv" class="glass-effect">
+        {{record}}
+    </div>
+    <script>
+        var contentDiv = document.getElementById('contentDiv');
+        var text = contentDiv.innerText;
+        var fontSize = 35;
+        if (text.length > 10) {
+            fontSize = Math.max(35 - (text.length - 10) * 0.5, 12);
+        }
+        contentDiv.style.fontSize = fontSize + 'px';
+    </script>
 </body>
 </html>

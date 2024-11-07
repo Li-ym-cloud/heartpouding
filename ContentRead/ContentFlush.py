@@ -16,8 +16,7 @@ app = Flask(__name__)
 @app.route('/')
 def content_show():
     record = pgrw.get_read_context("select content from public.content_flush_item order by random() limit 1;")
-    print(record)
-    return render_template('ContentFlush.html', record=record)
+    return render_template('ContentFlush.html', record=record[0])
 
 
 if __name__ == '__main__':
