@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Random Context</title>
+    <title>Smooth Transition Text Display</title>
     <style>
         body, html {
             height: 100%;
@@ -11,7 +11,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #f7f7f7; /* 轻微的背景颜色 */
+            background: #f7f7f7;
         }
         .glass-effect {
             backdrop-filter: blur(10px);
@@ -26,32 +26,105 @@
             color: #333;
             font-family: 'Arial', sans-serif;
             font-size: 20px;
-            /* 添加动画 */
-            animation: changeBackground 10s infinite alternate;
+            overflow: hidden;
         }
-        /* 定义动画 */
-        @keyframes changeBackground {
-            0% {
-                background: linear-gradient(135deg, rgba(200, 200, 200, 0.05), rgba(200, 200, 200, 0));
-            }
-            100% {
-                background: linear-gradient(135deg, rgba(200, 200, 200, 0.2), rgba(200, 200, 200, 0));
-            }
+        #textContent {
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            text-align: center;
+        }
+        #refreshButton {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #refreshButton:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
     <div id="contentDiv" class="glass-effect">
-        {{record}}
+        <div id="textContent">{{ record }}</div>
+        <button id="refreshButton">刷新</button>
     </div>
+
     <script>
-        var contentDiv = document.getElementById('contentDiv');
-        var text = contentDiv.innerText;
-        var fontSize = 35;
-        if (text.length > 10) {
-            fontSize = Math.max(35 - (text.length - 10) * 0.5, 12);
+        let scrollInterval;  // 用来存储滚动定时器
+        let isTextUpdating = false;  // 防止重复触发更新
+
+        // 清除滚动逻辑
+        function stopScrollingText() {
+            if (scrollInterval) {
+                clearInterval(scrollInterval);
+                scrollInterval = null;
+            }
         }
-        contentDiv.style.fontSize = fontSize + 'px';
+
+        // 启动逐字滚动逻辑
+        function enableScrollingText(text) {
+            const textContent = document.getElementById('textContent');
+            const contentDiv = document.getElementById('contentDiv');
+            let fontSize = 35;
+            if (text.length > 10) {
+                fontSize = Math.max(35 - (text.length - 10) * 0.5, 12);
+            }
+            const visibleLength = Math.floor(contentDiv.clientWidth / (fontSize * 0.6));
+            let start = 0;
+            const updateText = () => {
+                const displayText = text.slice(start, start + visibleLength);
+                textContent.innerText = displayText;
+                start = (start + 1) % text.length;
+            };
+            scrollInterval = setInterval(updateText, 300); // 每 300 毫秒更新一次
+        }
+
+        // 点击刷新按钮时，发送 AJAX 请求获取新内容
+        document.addEventListener("DOMContentLoaded", function() {
+            const refreshButton = document.getElementById('refreshButton');
+            const textContent = document.getElementById('textContent');
+
+            refreshButton.addEventListener('click', () => {
+                if (isTextUpdating) return; // 防止重复点击
+
+                isTextUpdating = true;  // 标记更新状态
+
+                // 停止当前的滚动
+                stopScrollingText();
+
+                // 清空当前文本内容并显示加载状态（可选）
+                textContent.innerText = '加载中...';
+
+                // 发送请求获取新文本
+                fetch('/refresh_content')
+                    .then(response => response.json())
+                    .then(data => {
+                        // 等待一段时间，避免跳跃效果
+                        setTimeout(() => {
+                            // 更新文本内容
+                            const newText = data.record;
+                            textContent.innerText = newText;
+
+                            // 启动逐字滚动
+                            enableScrollingText(newText);
+
+                            isTextUpdating = false;  // 结束更新状态
+                        }, 500); // 延迟加载以避免跳跃效果
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        isTextUpdating = false;  // 结束更新状态
+                    });
+            });
+        });
     </script>
 </body>
 </html>
