@@ -32,3 +32,24 @@ def get_read_context(sql_txt):
         return None
     else:
         return record
+
+
+def write_context(context_list):
+    if len(context_list)==0 or context_list is None:
+        print(f"提交事务成功失败，暂无数据")
+        return
+    conn = get_db_connection()
+    cur = conn.cursor()
+    # 使用executemany来插入多条数据
+    # 首先构造一个包含占位符的SQL语句
+    query = """
+    INSERT INTO public.content_flush_item ("content")
+    VALUES (%s);
+    """
+    # 然后将contextlist中的每个元素作为一个元组传递给executemany
+    cur.executemany(query, [(context,) for context in context_list])
+    # 提交事务
+    conn.commit()
+    print(f"提交事务成功{len(context_list)}")
+    cur.close()
+    conn.close()

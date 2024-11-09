@@ -13,6 +13,16 @@
             justify-content: center;
             background: #f7f7f7;
         }
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #333; /* 墨色 */
+            z-index: -1; /* 确保这个伪元素在contentDiv之下 */
+        }
         .glass-effect {
             backdrop-filter: blur(10px);
             background: linear-gradient(135deg, rgba(200, 200, 200, 0.05), rgba(200, 200, 200, 0));
@@ -54,7 +64,7 @@
 <body>
     <div id="contentDiv" class="glass-effect">
         <div id="textContent">{{ record }}</div>
-        <button id="refreshButton">刷新</button>
+        <button id="refreshButton">下一条</button>
     </div>
 
     <script>
@@ -111,7 +121,6 @@
                         setTimeout(() => {
                             // 更新文本内容
                             const newText = data.record;
-                            textContent.innerText = newText;
 
                             // 启动逐字滚动
                             enableScrollingText(newText);
