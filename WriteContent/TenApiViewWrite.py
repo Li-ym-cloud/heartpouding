@@ -20,6 +20,15 @@ def hot_view(api_url, key=None):
         return None
 
 
+def music_com(api_url):
+    response = requests.get(api_url)
+    if response.status_code == 200:
+        json_data = response.json()['data']
+        return [f"{json_data['songs']}' '{json_data['sings']}' '{json_data['comment']}"]
+    else:
+        return None
+
+
 hot_list = [
     "https://tenapi.cn/v2/baiduhot",
     "https://tenapi.cn/v2/douyinhot",
@@ -34,3 +43,5 @@ for hot_url in hot_list:
     print(f"开始录入网址{hot_url}的数据")
     context_list = hot_view(hot_url, "data.name")
     pgrw.write_context(context_list)
+    context_music_list = music_com("https://tenapi.cn/v2/comment")
+    pgrw.write_context(context_music_list)
