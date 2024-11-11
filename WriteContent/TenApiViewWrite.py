@@ -9,7 +9,16 @@ from ContentRead import PGDBReadWrite as pgrw
 import requests
 import time
 
+def error_handler(func):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            print(f"Error occurred: {e}")
+            # 可以选择在这里记录错误或进行其他处理
+    return wrapper
 
+@error_handler
 def hot_view(api_url, key=None):
     response = requests.get(api_url)
     if response.status_code == 200:
@@ -19,7 +28,7 @@ def hot_view(api_url, key=None):
     else:
         return None
 
-
+@error_handler
 def music_com(api_url):
     response = requests.get(api_url)
     if response.status_code == 200:
@@ -30,8 +39,8 @@ def music_com(api_url):
 
 
 hot_list = [
-    "https://tenapi.cn/v2/baiduhot",
-    "https://tenapi.cn/v2/douyinhot",
+    # "https://tenapi.cn/v2/baiduhot",
+    # "https://tenapi.cn/v2/douyinhot",
     "https://tenapi.cn/v2/weibohot",
     "https://tenapi.cn/v2/zhihuhot",
     "https://tenapi.cn/v2/bilihot",

@@ -35,7 +35,7 @@ def get_read_context(sql_txt):
 
 
 def write_context(context_list):
-    if len(context_list)==0 or context_list is None:
+    if context_list is None or len(context_list)==0:
         print(f"提交事务成功失败，暂无数据")
         return
     conn = get_db_connection()
