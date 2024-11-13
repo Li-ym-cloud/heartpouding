@@ -39,8 +39,8 @@ def music_com(api_url):
 
 
 hot_list = [
-    # "https://tenapi.cn/v2/baiduhot",
-    # "https://tenapi.cn/v2/douyinhot",
+    "https://tenapi.cn/v2/baiduhot",
+    "https://tenapi.cn/v2/douyinhot",
     "https://tenapi.cn/v2/weibohot",
     "https://tenapi.cn/v2/zhihuhot",
     "https://tenapi.cn/v2/bilihot",
