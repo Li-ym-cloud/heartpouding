@@ -24,7 +24,7 @@ def content_show():
 @app.route('/refresh_content')
 def refresh_content():
     record = pgrw.get_read_context(
-        "select concat('---->',content) from public.content_flush_item where content is not null order by random() limit 1;"
+        "select concat('---->',content_xinghuo) from public.content_flush_item where content is not null order by random() limit 1;"
     )
     return jsonify({"record": record[0]})
 

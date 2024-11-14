@@ -8,6 +8,8 @@
 from ContentRead import PGDBReadWrite as pgrw
 import requests
 import time
+import XingHuoContent as xhc
+import concurrent.futures
 
 def error_handler(func):
     def wrapper(*args, **kwargs):
@@ -16,7 +18,9 @@ def error_handler(func):
         except Exception as e:
             print(f"Error occurred: {e}")
             # 可以选择在这里记录错误或进行其他处理
+
     return wrapper
+
 
 @error_handler
 def hot_view(api_url, key=None):
@@ -27,6 +31,7 @@ def hot_view(api_url, key=None):
         return context_list
     else:
         return None
+
 
 @error_handler
 def music_com(api_url):
@@ -51,6 +56,10 @@ for hot_url in hot_list:
     time.sleep(10)
     print(f"开始录入网址{hot_url}的数据")
     context_list = hot_view(hot_url, "data.name")
-    pgrw.write_context(context_list)
+    pgrw.write_context(context_list, "content")
+    context_xinghuo_list = [xhc.return_context_xinghuo(context_item) for context_item in context_list]
+    pgrw.write_context(context_xinghuo_list, "context_xinghuo_list")
     context_music_list = music_com("https://tenapi.cn/v2/comment")
-    pgrw.write_context(context_music_list)
+    pgrw.write_context(context_music_list, "content")
+    context_xinghuo_music_list = [xhc.return_context_xinghuo(context_item) for context_item in context_music_list]
+    pgrw.write_context(context_xinghuo_music_list, "context_xinghuo_music_list")
