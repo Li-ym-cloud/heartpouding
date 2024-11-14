@@ -9,7 +9,6 @@ from ContentRead import PGDBReadWrite as pgrw
 import requests
 import time
 import XingHuoContent as xhc
-import concurrent.futures
 
 def error_handler(func):
     def wrapper(*args, **kwargs):
@@ -58,8 +57,8 @@ for hot_url in hot_list:
     context_list = hot_view(hot_url, "data.name")
     pgrw.write_context(context_list, "content")
     context_xinghuo_list = [xhc.return_context_xinghuo(context_item) for context_item in context_list]
-    pgrw.write_context(context_xinghuo_list, "context_xinghuo_list")
+    pgrw.write_context(context_xinghuo_list, "content_xinghuo")
     context_music_list = music_com("https://tenapi.cn/v2/comment")
     pgrw.write_context(context_music_list, "content")
     context_xinghuo_music_list = [xhc.return_context_xinghuo(context_item) for context_item in context_music_list]
-    pgrw.write_context(context_xinghuo_music_list, "context_xinghuo_music_list")
+    pgrw.write_context(context_xinghuo_music_list, "content_xinghuo")
