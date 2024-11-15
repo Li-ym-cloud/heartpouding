@@ -5,10 +5,13 @@
 @DateTime 2024/11/920:26
 @Speak 通过https://docs.tenapi.cn/获得数据，本api预估在241224停止更新
 """
+from lib2to3.fixes.fix_input import context
+
 from ContentRead import PGDBReadWrite as pgrw
 import requests
 import time
 import XingHuoContent as xhc
+
 
 def error_handler(func):
     def wrapper(*args, **kwargs):
@@ -43,22 +46,24 @@ def music_com(api_url):
 
 
 hot_list = [
+    "https://tenapi.cn/v2/toutiaohotnew",
     "https://tenapi.cn/v2/baiduhot",
     "https://tenapi.cn/v2/douyinhot",
     "https://tenapi.cn/v2/weibohot",
     "https://tenapi.cn/v2/zhihuhot",
     "https://tenapi.cn/v2/bilihot",
-    "https://tenapi.cn/v2/toutiaohot",
-    "https://tenapi.cn/v2/toutiaohotnew"
+    "https://tenapi.cn/v2/toutiaohot"
 ]
 for hot_url in hot_list:
     time.sleep(10)
     print(f"开始录入网址{hot_url}的数据")
-    context_list = hot_view(hot_url, "data.name")
-    pgrw.write_context(context_list, "content")
-    context_xinghuo_list = [xhc.return_context_xinghuo(context_item) for context_item in context_list]
-    pgrw.write_context(context_xinghuo_list, "content_xinghuo")
-    context_music_list = music_com("https://tenapi.cn/v2/comment")
-    pgrw.write_context(context_music_list, "content")
-    context_xinghuo_music_list = [xhc.return_context_xinghuo(context_item) for context_item in context_music_list]
-    pgrw.write_context(context_xinghuo_music_list, "content_xinghuo")
+    context_0_list = hot_view(hot_url, "data.name")
+    if context_0_list is not None:
+        context_list = [{"content": item_c, "content_xinghuo": xhc.return_context_xinghuo(item_c)} for item_c in
+                        context_0_list]
+        pgrw.write_context(context_list, ["content", "content_xinghuo"])
+    context_music_0_list = music_com("https://tenapi.cn/v2/comment")
+    if context_music_0_list is not None:
+        context_list = [{"content": item_c, "content_xinghuo": xhc.return_context_xinghuo(item_c)} for item_c in
+                        context_music_0_list]
+        pgrw.write_context(context_list, ["content", "content_xinghuo"])
