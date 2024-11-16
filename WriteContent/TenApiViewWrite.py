@@ -6,7 +6,7 @@
 @Speak 通过https://docs.tenapi.cn/获得数据，本api预估在241224停止更新
 """
 
-from ContentRead import PGDBReadWrite as pgrw
+from ..ContentRead import PGDBReadWrite as pgrw
 import requests
 import time
 import XingHuoContent as xhc
