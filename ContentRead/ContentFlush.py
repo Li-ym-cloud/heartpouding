@@ -29,4 +29,4 @@ def refresh_content():
     return jsonify({"record": record[0]})
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
