@@ -5,8 +5,17 @@
 @DateTime 2024/11/920:26
 @Speak 通过https://docs.tenapi.cn/获得数据，本api预估在241224停止更新
 """
+import sys
+import os
 
-from ..ContentRead import PGDBReadWrite as pgrw
+# 获取当前脚本的绝对路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# 获取项目的根目录
+project_root = os.path.abspath(os.path.join(current_dir, "../.."))
+# 将项目根目录添加到 sys.path
+sys.path.append(project_root)
+
+from ContentRead import PGDBReadWrite as pgrw
 import requests
 import time
 import XingHuoContent as xhc
