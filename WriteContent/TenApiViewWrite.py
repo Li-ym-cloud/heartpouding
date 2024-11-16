@@ -35,19 +35,7 @@ def error_handler(func):
 
 @error_handler
 def hot_view(api_url, key=None):
-    api_0url = "https://kps.kdlapi.com/api/getkps/?secret_id=oxvo6mr7oskc5po08nbo&signature=liptce06e5bb67g576ink7yrjqj5dgrt&num=1&pt=1&sep=1"
-
-    # 获取API接口返回的代理IP
-    proxy_ip = requests.get(api_0url).text
-
-    # 用户名密码认证(私密代理/独享代理)
-    username = "jjmpasuo"
-    password = "f4e8bkp8"
-    proxies = {
-        "http": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": proxy_ip},
-        "https": "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password, "proxy": proxy_ip}
-    }
-    response = requests.get(api_url, proxies=proxies)
+    response = requests.get(api_url)
     if response.status_code == 200:
         json_data = response.json()
         context_list = [data_item[key.split('.')[1]] for data_item in json_data[key.split('.')[0]]]
