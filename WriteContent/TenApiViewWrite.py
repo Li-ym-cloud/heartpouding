@@ -10,8 +10,10 @@ import os
 
 # 获取当前脚本的绝对路径
 current_dir = os.path.dirname(os.path.abspath(__file__))
+print(current_dir)
 # 获取项目的根目录
-project_root = os.path.abspath(os.path.join(current_dir, "../.."))
+project_root = os.path.abspath(os.path.join(current_dir, "../"))
+print(project_root)
 # 将项目根目录添加到 sys.path
 sys.path.append(project_root)
 
