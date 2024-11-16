@@ -5,7 +5,6 @@
 @DateTime 2024/11/920:26
 @Speak 通过https://docs.tenapi.cn/获得数据，本api预估在241224停止更新
 """
-from lib2to3.fixes.fix_input import context
 
 from ContentRead import PGDBReadWrite as pgrw
 import requests
