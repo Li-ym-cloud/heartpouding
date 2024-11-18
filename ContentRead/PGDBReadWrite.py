@@ -25,7 +25,7 @@ def get_read_context(sql_txt):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(sql_txt)
-    record = cur.fetchone()
+    record = cur.fetchall()
     cur.close()
     conn.close()
     if record is None:
