@@ -73,6 +73,7 @@
         let cachedData = [];  // 缓存的数据
         let currentIndex = 0;  // 当前显示的记录索引
         const cacheTimeout = 60 * 1000; // 缓存有效期为1分钟
+        let up_next = 0;
 
         // 清除滚动逻辑
         function stopScrollingText() {
@@ -83,7 +84,9 @@
         }
 
         // 启动逐字滚动逻辑
-        function enableScrollingText(text) {
+        function enableScrollingText(text, delay = 500) {
+            stopScrollingText();  // 先停止任何现有的滚动逻辑
+
             const textContent = document.getElementById('textContent');
             const contentDiv = document.getElementById('contentDiv');
             let fontSize = 35;
@@ -93,30 +96,42 @@
             const visibleLength = Math.floor(contentDiv.clientWidth / (fontSize * 0.6));
             let start = 0;
             const updateText = () => {
-                const displayText = text.slice(start, start + visibleLength);
-                textContent.innerText = displayText;
+                textContent.innerHTML = '';
+                const displayText = text.slice(start, start + visibleLength).padEnd(visibleLength, ' ');
+                textContent.innerText = displayText; // 使用 innerHTML 替换 innerText
                 start = (start + 1) % text.length;
             };
-            scrollInterval = setInterval(updateText, 300); // 每 300 毫秒更新一次
+
+            // 延迟一段时间再开始滚动
+            setTimeout(() => {
+                scrollInterval = setInterval(updateText, 200);
+            }, delay);
         }
 
         // 从缓存或服务器获取数据
         function fetchDataFromCacheOrServer() {
             if (cachedData.length > 0 && (Date.now() - cachedData[0].timestamp < cacheTimeout)) {
+                // 缓存有效，直接显示下一条记录
                 showNextRecord();
             } else {
+                // 缓存无效或为空，从服务器请求数据
+                stopScrollingText();  // 停止当前的滚动逻辑
+                document.getElementById('textContent').innerHTML = '';  // 清空显示内容
+
                 fetch('/refresh_content')
                     .then(response => response.json())
                     .then(data => {
                         if (data && data.records && data.records.length > 0) {
+                            // 更新缓存数据
                             cachedData = data.records.map(record => ({
                                 text: record,
                                 timestamp: Date.now()
                             }));
                             currentIndex = 0;
+                            // 显示第一条记录
                             showNextRecord();
                         } else {
-                            console.error('No records returned from server');
+                            // 没有新数据，显示提示信息
                             enableScrollingText('暂无数据');
                         }
                     })
@@ -130,9 +145,14 @@
         // 显示下一条记录
         function showNextRecord() {
             if (cachedData.length > 0) {
-                const record = cachedData[currentIndex];
-                enableScrollingText(record.text);
-                currentIndex = (currentIndex + 1) % cachedData.length;
+                if (currentIndex >= cachedData.length) {
+                    cachedData = [];
+                    fetchDataFromCacheOrServer(); // 刷新数据
+                }else {
+                    const record = cachedData[currentIndex];
+                    enableScrollingText(record.text);
+                    currentIndex = currentIndex + 1;
+                }
             } else {
                 enableScrollingText('暂无数据');
             }
@@ -141,7 +161,6 @@
         // 点击刷新按钮时，发送 AJAX 请求获取新内容
         document.addEventListener("DOMContentLoaded", function() {
             const refreshButton = document.getElementById('refreshButton');
-            const textContent = document.getElementById('textContent');
 
             refreshButton.addEventListener('click', () => {
                 if (isTextUpdating) return; // 防止重复点击
@@ -151,14 +170,19 @@
                 // 停止当前的滚动
                 stopScrollingText();
 
-                // 清空当前文本内容并显示加载状态（可选）
-                // textContent.innerText = '加载中...';
-
-                // 发送请求获取新文本
-                setTimeout(() => {
-                    fetchDataFromCacheOrServer();
+                // 如果缓存中有数据，则直接显示下一条，否则清除缓存并请求新数据
+                if (cachedData.length > 0) {
+                    showNextRecord();
                     isTextUpdating = false;  // 结束更新状态
-                }, 500); // 延迟加载以避免跳跃效果
+                } else {
+                    // 清除缓存
+                    cachedData = [];
+                    // 发送请求获取新文本
+                    setTimeout(() => {
+                        fetchDataFromCacheOrServer();
+                        isTextUpdating = false;  // 结束更新状态
+                    }, 500); // 延迟加载以避免跳跃效果
+                }
             });
 
             // 初始化时尝试从缓存或服务器获取数据

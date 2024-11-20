@@ -21,6 +21,14 @@ def get_db_connection():
     return conn
 
 
+def update_table(sql_text):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(sql_text)
+    conn.commit()
+    cur.close()
+    conn.close()
+
 def get_read_context(sql_txt):
     conn = get_db_connection()
     cur = conn.cursor()
