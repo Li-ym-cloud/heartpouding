@@ -11,6 +11,7 @@
     <option name="namespacePackageFolders">
       <list>
         <option value="$MODULE_DIR$/WriteContent" />
+        <option value="$MODULE_DIR$/app/main" />
       </list>
     </option>
   </component>
