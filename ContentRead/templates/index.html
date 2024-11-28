@@ -1,0 +1,10 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+
+{% block app_content %}
+    {% if content_item %}
+        <p>{{ content_item.content }}</p>
+    {% else %}
+        <p>No content item found.</p>
+    {% endif %}
+{% endblock %}
