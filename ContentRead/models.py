@@ -1,4 +1,4 @@
-from ContentRead import db
+from . import db
 
 
 class ContentFlushItem(db.Model):
