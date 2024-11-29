@@ -1,10 +1,34 @@
 <!-- templates/index.html -->
 {% extends "base.html" %}
 
+{% block styles %}
+{{ super() }}
+<style>
+    .navbar-nav .content-item {
+        margin-right: 1rem; /* 右边距 */
+        margin-left: 1rem; /* 左边距 */
+        margin-top: 0.5rem; /* 上边距 */
+        margin-bottom: 0.5rem; /* 下边距 */
+    }
+
+    .content-item-large-text {
+        font-size: 2rem; /* 调整字体大小 */
+    }
+</style>
+{% endblock %}
+
 {% block app_content %}
-    {% if content_item %}
-        <p>{{ content_item.content }}</p>
-    {% else %}
-        <p>No content item found.</p>
-    {% endif %}
+{% if content_item %}
+<ul class="d-flex flex-column justify-content-center align-items-center">
+    <li style="list-style-type: none;"><br></li>
+    <li class="content-item content-item-large-text" style="list-style-type: none;">{{ content_item.content }}</li>
+    <!-- 应用新的类 -->
+    <li style="list-style-type: none;"><br></li>
+    <li style="list-style-type: none;">
+        <a href="{{ url_for('main.index') }}" class="btn btn-primary btn-sm">下一条</a>
+    </li>
+</ul>
+{% else %}
+<p>No content item found.</p>
+{% endif %}
 {% endblock %}

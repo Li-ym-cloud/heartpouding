@@ -12,3 +12,14 @@ class ContentFlushItem(db.Model):
 
     def __repr__(self):
         return f'<ContentFlushItem {self.id}>'
+
+
+class UserLabel(db.Model):
+    __tablename__ = 'user_label'
+
+    user_id = db.Column(db.String(6), primary_key=True)
+    max_content_id = db.Column(db.BigInteger, nullable=True)
+    label_one = db.Column(db.String, nullable=True)
+
+    def __repr__(self):
+        return f'<UserLabel {self.user_id}>'

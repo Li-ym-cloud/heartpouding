@@ -3,7 +3,7 @@
 @Email 2308570708@qq.com
 @FileName TenApiViewWrite.py
 @DateTime 2024/11/920:26
-@Speak 通过https://docs.tenapi.cn/获得数据，本api预估在241224停止更新
+@Speak 通过https://docs.tenapi.cn/获得数据，本api预估在241224停止更新 --已经废弃
 """
 
 import PGDBReadWrite as pgrw
