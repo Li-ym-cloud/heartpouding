@@ -1,4 +1,3 @@
-<!-- templates/index.html -->
 {% extends "base.html" %}
 
 {% block styles %}
@@ -14,15 +13,24 @@
     .content-item-large-text {
         font-size: 2rem; /* 调整字体大小 */
     }
+
+    .separator {
+        width: 30%; /* 横线长度为画面宽度的一半 */
+        height: 2px; /* 横线高度 */
+        background-color: #D3D3D3; /* 横线颜色 */
+        margin: 1rem auto; /* 上下间距1rem，自动左右居中 */
+    }
 </style>
 {% endblock %}
 
 {% block app_content %}
-{% if content_item %}
+{% if content_items %}
 <ul class="d-flex flex-column justify-content-center align-items-center">
+    {% for item in content_items %}
     <li style="list-style-type: none;"><br></li>
-    <li class="content-item content-item-large-text" style="list-style-type: none;">{{ content_item.content }}</li>
-    <!-- 应用新的类 -->
+    <li class="content-item content-item-large-text" style="list-style-type: none;">{{ item.content_xinghuo }}</li>
+    <li class="separator" style="list-style-type: none;"></li> <!-- 在内容之后添加一条横线 -->
+    {% endfor %}
     <li style="list-style-type: none;"><br></li>
     <li style="list-style-type: none;">
         <a href="{{ url_for('main.index') }}" class="btn btn-primary btn-sm">下一条</a>
