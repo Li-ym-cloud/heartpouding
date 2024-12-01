@@ -8,7 +8,6 @@
 
 import PGDBReadWrite as pgrw
 import requests
-import time
 import XingHuoContent as xhc
 
 
@@ -44,6 +43,9 @@ def music_com(api_url):
         return None
 
 
+"""
+这部分代码已经因为api失效而过期--2024年11月30日
+改用https://orz.ai/dailynews/?platform=
 hot_list = [
     "https://tenapi.cn/v2/toutiaohotnew",
     "https://tenapi.cn/v2/baiduhot",
@@ -65,4 +67,38 @@ for hot_url in hot_list:
     if context_music_0_list is not None:
         context_list = [{"content": item_c, "content_xinghuo": xhc.return_context_xinghuo(item_c)} for item_c in
                         context_music_0_list]
+        pgrw.write_context(context_list, ["content", "content_xinghuo"])
+"""
+
+
+@error_handler
+def orz_com(api_url):
+    response = requests.get(api_url)
+    context_list = []
+    if response.status_code == 200:
+        json_data = response.json()['data']
+        for title_and_desc in json_data:
+            if str(title_and_desc['desc']).strip() == "" or title_and_desc['desc'] is None:
+                print(f"{title_and_desc['title']}----需要进入大模型部分")
+                context_list.append({"content": title_and_desc['title'],
+                                     "content_xinghuo": xhc.return_context_xinghuo(title_and_desc['title'])})
+            elif len(str(title_and_desc['desc'])) < 3 and len(str(title_and_desc['title'])) < 3:
+                pass
+            else:
+                context_list.append({"content": title_and_desc['title'],
+                                     "content_xinghuo": title_and_desc['desc']})
+    return context_list
+
+
+site_names = ["baidu", "shaoshupai", "weibo", "zhihu", "36kr", "52pojie", "bilibili", "douban", "hupu", "tieba",
+              "juejin", "douyin", "v2ex", "jinritoutiao"]
+https_bfe = "https://orz.ai/dailynews/?platform="
+for site_name in site_names:
+    api_url = https_bfe + site_name
+    print(f"此刻输出的link为{api_url}")
+    context_list = orz_com(api_url)
+    if len(context_list) <= 0:
+        pass
+    else:
+        print(f"本次输出条数为{len(context_list)}")
         pgrw.write_context(context_list, ["content", "content_xinghuo"])
