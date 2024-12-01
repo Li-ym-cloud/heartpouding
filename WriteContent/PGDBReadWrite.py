@@ -58,7 +58,7 @@ def write_context(context_list, col_names):
 
     # 构造完整的SQL语句
     query = f"""
-    INSERT INTO content_flush_item ({fields})
+    INSERT INTO "public"."content_flush_item" ({fields})
     VALUES ({placeholders});
     """
 
