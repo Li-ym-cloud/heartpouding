@@ -12,7 +12,7 @@ def index():
     # 获取今天第一个 ContentFlushItem 的 ID
     first_today_item = ContentFlushItem.query.filter(
         func.date(ContentFlushItem.insert_time) == today,
-        ContentFlushItem.content.isnot(None)
+        ContentFlushItem.content_xinghuo.isnot(None)
     ).order_by(ContentFlushItem.id).first()
     user_label = UserLabel.query.first()
     if first_today_item and first_today_item.id > user_label.max_content_id:
@@ -22,8 +22,8 @@ def index():
     # 假设你想获取最新的5条记录，这里使用了降序排列
     content_items = ContentFlushItem.query.filter(
         ContentFlushItem.id > user_label.max_content_id,
-        ContentFlushItem.content.isnot(None),
-        db.func.length(ContentFlushItem.content) > 5
+        ContentFlushItem.content_xinghuo.isnot(None),
+        db.func.length(ContentFlushItem.content_xinghuo) > 5
     ).order_by(ContentFlushItem.id.asc()).limit(3).all()
 
     if content_items:

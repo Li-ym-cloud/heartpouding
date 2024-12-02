@@ -28,8 +28,8 @@
 <ul class="d-flex flex-column justify-content-center align-items-center">
     {% for item in content_items %}
     <li style="list-style-type: none;"><br></li>
-    <li class="content-item content-item-large-text" style="list-style-type: none;">
-        <pre>{{ item.content_xinghuo }}</pre>
+    <li class="content-item content-item-large-text" style="list-style-type: none; white-space: pre-wrap;">
+        {{ item.content_xinghuo }}
     </li>
     <li class="separator" style="list-style-type: none;"></li> <!-- 在内容之后添加一条横线 -->
     {% endfor %}
