@@ -1,12 +1,12 @@
-from flask import Blueprint, render_template
+from flask import render_template
 from sqlalchemy import func
-from .models import ContentFlushItem, db, UserLabel
+from ..models import ContentFlushItem, UserLabel
+from .. import db
 from datetime import datetime, date
+from . import main
 
-bp = Blueprint('main', __name__)
 
-
-@bp.route('/')
+@main.route('/')
 def index():
     today = date.today()
     # 获取今天第一个 ContentFlushItem 的 ID
