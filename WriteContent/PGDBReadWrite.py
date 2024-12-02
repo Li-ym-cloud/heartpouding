@@ -17,6 +17,7 @@ DB_PASS = os.environ.get('DB_PASS')
 
 
 def get_db_connection():
+    print(f"{DB_HOST},{DB_NAME},{DB_USER},{DB_PASS}")
     conn = psycopg2.connect(host=DB_HOST, database=DB_NAME, user=DB_USER, password=DB_PASS)
     return conn
 
