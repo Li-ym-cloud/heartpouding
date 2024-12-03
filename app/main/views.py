@@ -24,7 +24,7 @@ def index():
         ContentFlushItem.id > user_label.max_content_id,
         ContentFlushItem.content_xinghuo.isnot(None),
         db.func.length(ContentFlushItem.content_xinghuo) > 5
-    ).order_by(ContentFlushItem.id.asc()).limit(2).all()
+    ).order_by(ContentFlushItem.id.asc()).limit(1).all()
 
     if content_items:
         # 更新UserLabel的max_content_id为最新获取到的内容项中的最大ID
