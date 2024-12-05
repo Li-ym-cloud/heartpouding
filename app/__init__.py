@@ -24,6 +24,7 @@ login_manager.login_view = 'auth.login'
 
 def create_app():
     app = Flask(__name__)
+    app.config['SECRET_KEY'] = 'djflasjdlfkasdlfldsdfasdfas'
     app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
