@@ -1,4 +1,5 @@
-from . import db
+from . import db, login_manager
+from flask_login import UserMixin
 
 
 class ContentFlushItem(db.Model):
@@ -23,3 +24,19 @@ class UserLabel(db.Model):
 
     def __repr__(self):
         return f'<UserLabel {self.user_id}>'
+
+
+class UserPasswordTable(UserMixin, db.Model):
+    __tablename__ = "user_password_table"
+
+    user_id = db.Column(db.String(6), primary_key=True)
+    username = db.Column(db.String)
+    password = db.Column(db.String)
+    last_login = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=True)
+
+    def __repr__(self):
+        return f'<UserPasswordTable {self.user_id}>'
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return UserPasswordTable.query.get(user_id)

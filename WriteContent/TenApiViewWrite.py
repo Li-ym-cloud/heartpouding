@@ -90,8 +90,8 @@ def orz_com(api_url):
     return context_list
 
 
-site_names = ["baidu", "weibo", "zhihu", "douban", "hupu", "tieba",
-              "juejin", "douyin",  "jinritoutiao"]
+site_names = ["baidu", "weibo", "zhihu", "36kr", "tieba",
+              "juejin", "douyin", "v2ex", "jinritoutiao"]
 https_bfe = "https://orz.ai/dailynews/?platform="
 for site_name in site_names:
     api_url = https_bfe + site_name

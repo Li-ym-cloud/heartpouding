@@ -11,12 +11,15 @@ from flask import Flask
 import os
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
+from flask_login import LoginManager
 
 DB_HOST = os.environ.get('DB_HOST')
 DB_NAME = os.environ.get('DB_NAME')
 DB_USER = os.environ.get('DB_USER')
 DB_PASS = os.environ.get('DB_PASS')
 db = SQLAlchemy()
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
 
 
 def create_app():
@@ -24,9 +27,12 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
+    login_manager.init_app(app)
     bootstrap = Bootstrap(app)
     from .main import main as main_blueprint  # 导入蓝图
     app.register_blueprint(main_blueprint)
+    from .auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint, url_prefix='/auth')
     with app.app_context():
         db.create_all()
     return app
