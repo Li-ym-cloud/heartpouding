@@ -11,8 +11,6 @@ import requests
 import json
 import os
 
-from psycopg2 import connect
-
 Authorization = os.environ.get('Authorization')
 
 
@@ -23,12 +21,14 @@ def error_handler(func):
         except Exception as e:
             print(f"Error occurred: {e}")
             # 可以选择在这里记录错误或进行其他处理
+
     return wrapper
 
 
 @error_handler
 def return_context_xinghuo(context: str):
     time.sleep(1)
+    print(Authorization, context)
     url = "https://spark-api-open.xf-yun.com/v1/chat/completions"
     data = {
         "max_tokens": 1406,
@@ -53,6 +53,5 @@ def return_context_xinghuo(context: str):
     response = requests.post(url, headers=header, json=data, stream=True)
     response.encoding = "utf-8"
     for line in response.iter_lines(decode_unicode="utf-8"):
-        print(line)
         context_xinghuo = json.loads(line)["choices"][0]["message"]["content"]
         return context_xinghuo
