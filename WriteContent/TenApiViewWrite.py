@@ -79,7 +79,6 @@ def orz_com(api_url):
         json_data = response.json()['data']
         for title_and_desc in json_data:
             if str(title_and_desc['desc']).strip() == "" or title_and_desc['desc'] is None:
-                print(f"{title_and_desc['title']}----需要进入大模型部分")
                 context_list.append({"content": title_and_desc['title'],
                                      "content_xinghuo": xhc.return_context_xinghuo(title_and_desc['title'])})
             elif len(str(title_and_desc['desc'])) < 3 and len(str(title_and_desc['title'])) < 3:

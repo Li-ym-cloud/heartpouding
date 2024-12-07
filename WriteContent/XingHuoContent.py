@@ -28,7 +28,6 @@ def error_handler(func):
 @error_handler
 def return_context_xinghuo(context: str):
     time.sleep(1)
-    print(Authorization, context)
     url = "https://spark-api-open.xf-yun.com/v1/chat/completions"
     data = {
         "max_tokens": 1406,

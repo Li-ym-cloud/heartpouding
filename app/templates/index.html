@@ -28,6 +28,12 @@
 <ul class="d-flex flex-column justify-content-center align-items-center">
     {% for item in content_items %}
     <li style="list-style-type: none;"><br></li>
+        <li class="content-item content-item-large-text" style="list-style-type: none; white-space: pre-wrap;">
+        距离刷完数据还剩下{{ last_num }}条
+    </li>
+    <li class="content-item content-item-large-text" style="list-style-type: none; white-space: pre-wrap;">
+        {{ item.content }}
+    </li>
     <li class="content-item content-item-large-text" style="list-style-type: none; white-space: pre-wrap;">
         {{ item.content_xinghuo }}
     </li>
