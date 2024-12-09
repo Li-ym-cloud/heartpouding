@@ -11,14 +11,11 @@ from .. import db
 
 @auth.route('/registration', methods=['GET', 'POST'])
 def registration():
-    try:
-        if current_user.user_id:
-            user = UserPasswordTable.query.filter(
-                UserPasswordTable.user_id == current_user.user_id
-            ).first()
-            return render_template('usershow.html', username=user.username)
-    except AttributeError as e:
-        pass
+    if current_user.is_authenticated and current_user.user_id:
+        user = UserPasswordTable.query.filter(
+            UserPasswordTable.user_id == current_user.user_id
+        ).first()
+        return render_template('usershow.html', username=user.username)
     form = LoginForm()
     if form.validate_on_submit() and form.registration.data:
         today = date.today()
