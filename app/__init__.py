@@ -21,6 +21,7 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 login_manager.login_view = 'auth.registration'
 
+
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = DB_NAME
@@ -34,7 +35,9 @@ def create_app():
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
     from .userShow import userShow as userShow_blueprint
-    app.register_blueprint(userShow_blueprint, url_prefix='/userShow')
+    app.register_blueprint(userShow_blueprint, url_prefix='/usershow')
+    from .context import context as context_blueprint
+    app.register_blueprint(context_blueprint, url_prefix='/context')
     with app.app_context():
         db.create_all()
     return app
