@@ -24,8 +24,8 @@ def registration():
             username=form.username.data,
             password=form.password.data
         )
-        user = UserPasswordTable.query.filter_by(username=form.username.data).first()
-        if user:
+        user_have = UserPasswordTable.query.filter_by(username=form.username.data).first()
+        if user_have:
             return render_template('registration.html', form=form, tips="用户名已存在")
         db.session.add(user)
         db.session.commit()
