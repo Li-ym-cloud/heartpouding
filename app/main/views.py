@@ -1,5 +1,9 @@
+"""
+目前这里使用的还是基于日走的逻辑，每个用户默认只展示当天最新的数据，而不展示过去日期的数据
+"""
 from flask import render_template
 from sqlalchemy import func
+from flask_login import current_user
 from ..models import ContentFlushItem, UserLabel
 from .. import db
 from datetime import datetime, date
@@ -15,7 +19,12 @@ def index():
         ContentFlushItem.content_xinghuo.isnot(None)
     ).order_by(ContentFlushItem.id).first()
     max_context_id = ContentFlushItem.query.order_by(ContentFlushItem.id.desc()).limit(1).first()
-    user_label = UserLabel.query.first()
+    try:
+        user_label = UserLabel.query.filter(
+            UserLabel.user_id == current_user.user_id
+        ).first()
+    except AttributeError as e:
+        user_label = UserLabel.query.first()
     if first_today_item and first_today_item.id > user_label.max_content_id:
         # 更新UserLabel的max_content_id为当前日期的最新id
         user_label.max_content_id = first_today_item.id
@@ -33,6 +42,5 @@ def index():
         last_num = max_context_id.id - max_id
         user_label.max_content_id = max_id
         db.session.commit()
-    print(last_num)
     return render_template('index.html', content_items=content_items,
                            last_num=last_num)

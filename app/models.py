@@ -18,7 +18,7 @@ class ContentFlushItem(db.Model):
 class UserLabel(db.Model):
     __tablename__ = 'user_label'
 
-    user_id = db.Column(db.String(6), primary_key=True)
+    user_id = db.Column(db.Integer, primary_key=True)
     max_content_id = db.Column(db.BigInteger, nullable=True)
     label_one = db.Column(db.String, nullable=True)
 
@@ -37,6 +37,9 @@ class UserPasswordTable(UserMixin, db.Model):
     def __repr__(self):
         return f'<UserPasswordTable {self.user_id}>'
 
+    def get_id(self):
+        return str(self.user_id)  # 返回字符串类型的 user_id
+
     @login_manager.user_loader
     def load_user(user_id):
-        return UserPasswordTable.query.get(user_id)
+        return UserPasswordTable.query.get(int(user_id))
