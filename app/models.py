@@ -10,6 +10,7 @@ class ContentFlushItem(db.Model):
     content = db.Column(db.Text, nullable=True)
     flush_sec = db.Column(db.Integer, nullable=True)  # 由于是计算列，这里不设置默认值
     content_xinghuo = db.Column(db.Text, nullable=True)
+    context_author = db.Column(db.Integer)
 
     def __repr__(self):
         return f'<ContentFlushItem {self.id}>'

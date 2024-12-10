@@ -12,6 +12,7 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, current_user
+from flask_pagedown import PageDown
 
 DB_HOST = os.environ.get('DB_HOST')
 DB_NAME = os.environ.get('DB_NAME')
@@ -19,6 +20,7 @@ DB_USER = os.environ.get('DB_USER')
 DB_PASS = os.environ.get('DB_PASS')
 db = SQLAlchemy()
 login_manager = LoginManager()
+pagadown = PageDown()
 login_manager.login_view = 'auth.registration'
 
 
@@ -30,6 +32,7 @@ def create_app():
     db.init_app(app)
     login_manager.init_app(app)
     bootstrap = Bootstrap(app)
+    pagadown.init_app(app) # 富文本
     from .main import main as main_blueprint  # 导入蓝图
     app.register_blueprint(main_blueprint)
     from .auth import auth as auth_blueprint
