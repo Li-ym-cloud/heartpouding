@@ -5,5 +5,5 @@ from wtforms.validators import DataRequired, length
 
 
 class EditForm(FlaskForm):
-    body = PageDownField("输入内容", validators=[DataRequired(), length(10, 100)])
-    submit = SubmitField('Submit')
+    body = PageDownField("发布消息", validators=[DataRequired(), length(10, 100)])
+    submit = SubmitField('提交')

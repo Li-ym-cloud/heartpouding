@@ -7,4 +7,10 @@
 {% endblock %}
 {% block app_content %}
 <div>欢迎用户{{ username }}登录</div>
+<div><br></div>
+<div class="d-flex flex-column align-items-center">
+    {{ wtf.quick_form(form) }}
+</div>
+<div><br></div>
+<div>{{ is_succ }}</div>
 {% endblock %}

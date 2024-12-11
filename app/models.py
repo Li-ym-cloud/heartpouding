@@ -8,7 +8,7 @@ class ContentFlushItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     insert_time = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=True)
     content = db.Column(db.Text, nullable=True)
-    flush_sec = db.Column(db.Integer, nullable=True)  # 由于是计算列，这里不设置默认值
+    flush_sec = db.Column(db.Integer, db.Computed("length(content)"), nullable=True)
     content_xinghuo = db.Column(db.Text, nullable=True)
     context_author = db.Column(db.Integer)
 
