@@ -8,7 +8,7 @@ from werkzeug.utils import redirect
 from . import auth
 from .forms import LoginForm
 from ..context.forms import EditForm
-from ..models import UserPasswordTable, UserLabel, ContentFlushItem
+from ..models import UserPasswordTable, UserLabel, ContentFlushItem, UserShowDetail
 from .. import db
 
 
@@ -45,6 +45,17 @@ def registration():
         user = UserPasswordTable.query.filter_by(username=form.username.data).first()
         if user is not None and user.password == form.password.data:
             login_user(UserPasswordTable.query.filter_by(username=form.username.data).first())
+            today = date.today()
+            user_num = UserShowDetail.query.filter(
+                UserShowDetail.user_id == current_user.user_id,
+                func.date(UserShowDetail.up_time) == today,
+            ).first()
+            if user_num:
+                pass
+            else:
+                user_num.now_push = 0
+                user_num.up_time = today
+                db.session.commit()
             return redirect(url_for('context.context'))
         else:
             return render_template('registration.html', form=form, tips="账号密码不正确")

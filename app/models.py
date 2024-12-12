@@ -27,6 +27,18 @@ class UserLabel(db.Model):
         return f'<UserLabel {self.user_id}>'
 
 
+class UserShowDetail(db.Model):
+    __tablename__ = 'user_show_detail'
+
+    user_id = db.Column(db.Integer, primary_key=True)
+    all_push = db.Column(db.Integer)
+    now_push = db.Column(db.Integer)
+    up_time = db.Column(db.DateTime)
+
+    def __repr__(self):
+        return f'<UserLabel {self.user_id}>'
+
+
 class UserPasswordTable(UserMixin, db.Model):
     __tablename__ = "user_password_table"
 
