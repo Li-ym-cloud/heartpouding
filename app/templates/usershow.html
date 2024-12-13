@@ -12,5 +12,7 @@
     {{ wtf.quick_form(form) }}
 </div>
 <div><br></div>
+<div>您已经阅读条数:{{ user_num.history_read }}</div>
+<div><br></div>
 <div>历史发送消息:{{ user_num.all_push }}<span>  </span>今日发送消息:{{ user_num.now_push }}</div>
 {% endblock %}

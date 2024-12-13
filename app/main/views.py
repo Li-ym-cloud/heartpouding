@@ -4,7 +4,7 @@
 from flask import render_template
 from sqlalchemy import func
 from flask_login import current_user
-from ..models import ContentFlushItem, UserLabel
+from ..models import ContentFlushItem, UserLabel, UserShowDetail
 from .. import db
 from datetime import datetime, date
 from . import main
@@ -40,6 +40,25 @@ def index():
             max_id = max(item.id for item in content_items)
             last_num = max_context_id.id - max_id
             user_label.max_content_id = max_id
+            user_num = UserShowDetail.query.filter(
+                UserShowDetail.user_id == current_user.user_id
+            ).first()
+            if user_num and user_num.history_read is None:
+                user_num.history_read = 1
+                user_num.read_up_time = today
+            elif user_num and user_num.history_read is not None:
+                user_num.history_read += 1
+                print(user_num.history_read)
+                user_num.read_up_time = today
+            else:
+                up_user_num = UserShowDetail(
+                    user_id=current_user.user_id,
+                    history_read=1,
+                    all_push=0,
+                    now_push=0,
+                    read_up_time=today
+                )
+                db.session.add(up_user_num)
             db.session.commit()
             return render_template('index.html', content_items=content_items,
                                    last_num=last_num)

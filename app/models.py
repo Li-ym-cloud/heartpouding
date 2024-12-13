@@ -34,6 +34,8 @@ class UserShowDetail(db.Model):
     all_push = db.Column(db.Integer)
     now_push = db.Column(db.Integer)
     up_time = db.Column(db.DateTime)
+    history_read = db.Column(db.Integer,default=0)
+    read_up_time = db.Column(db.DateTime)
 
     def __repr__(self):
         return f'<UserLabel {self.user_id}>'

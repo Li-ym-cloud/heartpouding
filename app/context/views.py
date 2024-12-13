@@ -36,6 +36,10 @@ def context():
                 user_num.all_push += 1
                 user_num.now_push += 1
                 user_num.up_time = today
+            elif user_num and user.all_push is None:
+                user_num.all_push += 1
+                user_num.now_push += 1
+                user_num.up_time = today
             else:
                 up_user_num = UserShowDetail(
                     user_id=current_user.user_id,

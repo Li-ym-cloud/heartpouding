@@ -37,6 +37,15 @@ def registration():
             ).order_by(ContentFlushItem.id).first().id
         )
         db.session.add(user_label)
+        up_user_num = UserShowDetail(
+            user_id=UserPasswordTable.query.filter_by(username=form.username.data).first().user_id,
+            history_read=0,
+            all_push=0,
+            now_push=0,
+            up_time=today,
+            read_up_time=today
+        )
+        db.session.add(up_user_num)
         db.session.commit()
         login_user(UserPasswordTable.query.filter_by(username=form.username.data).first())
         return redirect(url_for('context.context'))
@@ -50,12 +59,25 @@ def registration():
                 UserShowDetail.user_id == current_user.user_id,
                 func.date(UserShowDetail.up_time) == today,
             ).first()
+            user_num_noday = UserShowDetail.query.filter(
+                UserShowDetail.user_id == current_user.user_id
+            ).first()
             if user_num:
-                pass
-            else:
                 user_num.now_push = 0
                 user_num.up_time = today
-                db.session.commit()
+            elif user_num_noday is None:
+                up_user_num = UserShowDetail(
+                    user_id=current_user.user_id,
+                    history_read=0,
+                    all_push=0,
+                    now_push=0,
+                    up_time=today,
+                    read_up_time=today
+                )
+                db.session.add(up_user_num)
+            else:
+                pass
+            db.session.commit()
             return redirect(url_for('context.context'))
         else:
             return render_template('registration.html', form=form, tips="账号密码不正确")
