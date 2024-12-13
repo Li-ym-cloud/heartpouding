@@ -63,6 +63,7 @@ def registration():
                 UserShowDetail.user_id == current_user.user_id
             ).first()
             if user_num:
+                print("---------------------")
                 user_num.now_push = 0
                 user_num.up_time = today
             elif user_num_noday is None:

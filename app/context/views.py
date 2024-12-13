@@ -28,15 +28,14 @@ def context():
         )
         db.session.add(new_context)
         try:
-            db.session.commit()
             user_num = UserShowDetail.query.filter(
                 UserShowDetail.user_id == current_user.user_id
             ).first()
-            if user_num:
-                user_num.all_push += 1
-                user_num.now_push += 1
+            if user_num and user_num.all_push is None:
+                user_num.all_push = 1
+                user_num.now_push = 1
                 user_num.up_time = today
-            elif user_num and user.all_push is None:
+            elif user_num:
                 user_num.all_push += 1
                 user_num.now_push += 1
                 user_num.up_time = today
@@ -50,7 +49,6 @@ def context():
                 db.session.add(up_user_num)
             db.session.commit()
             flash('发布成功', 'success')  # 使用 flash 显示成功消息
-            form = EditForm()  # 创建一个新的表单实例来清空表单
         except Exception as e:
             db.session.rollback()
             flash(f'发布失败: {str(e)}', 'danger')  # 发生错误时显示错误消息
