@@ -45,10 +45,11 @@ def index():
             ).first()
             if user_num and user_num.history_read is None:
                 user_num.history_read = 1
+                user_num.new_level()
                 user_num.read_up_time = today
             elif user_num and user_num.history_read is not None:
                 user_num.history_read += 1
-                print(user_num.history_read)
+                user_num.new_level()
                 user_num.read_up_time = today
             else:
                 up_user_num = UserShowDetail(

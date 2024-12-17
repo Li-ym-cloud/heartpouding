@@ -34,11 +34,28 @@ class UserShowDetail(db.Model):
     all_push = db.Column(db.Integer)
     now_push = db.Column(db.Integer)
     up_time = db.Column(db.DateTime)
-    history_read = db.Column(db.Integer,default=0)
+    history_read = db.Column(db.Integer, default=0)
     read_up_time = db.Column(db.DateTime)
+    level = db.Column(db.Integer, default=1)
+    all_exper = db.Column(db.Integer, default=100)
+    have_exper = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return f'<UserLabel {self.user_id}>'
+
+    def new_level(self):
+        self.have_exper += 1
+        if self.have_exper >= self.all_exper:
+            self.all_exper *= 10
+            self.have_exper = 0
+            self.level += 1
+
+    def new_level_edit(self):
+        self.have_exper += 5
+        if self.have_exper >= self.all_exper:
+            self.all_exper *= 10
+            self.have_exper = 0
+            self.level += 1
 
 
 class UserPasswordTable(UserMixin, db.Model):

@@ -35,10 +35,12 @@ def context():
                 user_num.all_push = 1
                 user_num.now_push = 1
                 user_num.up_time = today
+                user_num.new_level_edit()
             elif user_num:
                 user_num.all_push += 1
                 user_num.now_push += 1
                 user_num.up_time = today
+                user_num.new_level_edit()
             else:
                 up_user_num = UserShowDetail(
                     user_id=current_user.user_id,

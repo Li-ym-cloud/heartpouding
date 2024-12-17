@@ -12,7 +12,7 @@
     {{ wtf.quick_form(form) }}
 </div>
 <div><br></div>
-<div><progress value="70" max="100"></progress></div>
+<div><progress value="{{ user_num.have_exper }}" max="{{ user_num.all_exper }}"></progress><br>当前等级{{ user_num.level }},距离下次升级经验还差{{ user_num.all_exper-user_num.have_exper }}</div>
 <div><br></div>
 <div>您已经阅读条数:{{ user_num.history_read }}</div>
 <div><br></div>
