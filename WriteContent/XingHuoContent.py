@@ -43,7 +43,7 @@ def return_context_xinghuo(context: str):
                 "content": context
             }
         ],
-        "model": "4.0Ultra"
+        "model": "generalv3.5"
     }
     data["stream"] = False
     header = {
